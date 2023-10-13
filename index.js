@@ -8,6 +8,11 @@ const PORT = 7000;
 app.use(express.json());
 app.use(router);
 
+
+
+
+
+
 // SERVER CONTECTION CHECK
 
 app.get('/health', (req,res)=>  {
