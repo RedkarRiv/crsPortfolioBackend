@@ -6,8 +6,8 @@ const authController = {};
 
 authController.register = async (req, res) => {
   try {
-    const firstName = req.body.name;
-    const lastName = req.body.surname;
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
     const email = req.body.email;
     const password = req.body.password;
 
@@ -39,7 +39,7 @@ authController.register = async (req, res) => {
       email: email,
       password: newPassword,
       emailCheck : 0,
-      roledId : 1,
+      roleId : 1,
       userStatus : 1,
     });
     return res.send(newUser);
@@ -83,8 +83,8 @@ authController.login = async (req, res) => {
       {
         userId: user.id,
         roleId: user.roleId,
-        email: user.email,
         name:user.firstName,
+        lastName: user.lastName
       },
       "kilombo",
       {
