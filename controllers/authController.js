@@ -1,4 +1,4 @@
-const { User } = require("../../models");
+const { User } = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -52,58 +52,59 @@ authController.register = async (req, res) => {
   }
 };
 
-// authController.login = async (req, res) => {
-//   try {
-//     const email = req.body.email;
-//     const password = req.body.password;
-//     const user = await User.findOne({
-//       where: {
-//         email: email,
-//       },
-//     });
+authController.login = async (req, res) => {
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+    const user = await User.findOne({
+      where: {
+        email: email,
+      },
+    });
 
-//     if (!user) {
-//       return res.status(501).json({
-//         success: true,
-//         message: "Usuario incorrecto",
-//       });
-//     }
+    if (!user) {
+      return res.status(501).json({
+        success: true,
+        message: "Usuario incorrecto",
+      });
+    }
 
-//     const isMatch = bcrypt.compareSync(password, user.password);
-//     console.log(isMatch);
+    const isMatch = bcrypt.compareSync(password, user.password);
+    console.log(isMatch);
 
-//     if (!isMatch) {
-//       return res.status(501).json({
-//         success: true,
-//         message: "Contraseña incorrecta",
-//       });
-//     }
+    if (!isMatch) {
+      return res.status(501).json({
+        success: true,
+        message: "Contraseña incorrecta",
+      });
+    }
 
-//     const token = jwt.sign(
-//       {
-//         userId: user.id,
-//         roleId: user.role_id,
-//         email: user.email,
-//       },
-//       "kilombo",
-//       {
-//         expiresIn: "2h",
-//       }
-//     );
+    const token = jwt.sign(
+      {
+        userId: user.id,
+        roleId: user.roleId,
+        email: user.email,
+        name:user.firstName,
+      },
+      "kilombo",
+      {
+        expiresIn: "2h",
+      }
+    );
 
-//     return res.json({
-//       success: true,
-//       message: "Usuario logeado",
-//       token: token,
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       success: false,
-//       message: "El usuario no ha podido logearse",
-//       error: error.message,
-//     });
-//   }
-// };
+    return res.json({
+      success: true,
+      message: "Usuario logeado",
+      token: token,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "El usuario no ha podido logearse",
+      error: error.message,
+    });
+  }
+};
 
 
 module.exports = authController;
