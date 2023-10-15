@@ -6,6 +6,7 @@ const authController = {};
 
 authController.register = async (req, res) => {
   try {
+    console.log(req.body);
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const email = req.body.email;
@@ -14,8 +15,18 @@ authController.register = async (req, res) => {
     const checkEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{4,}$/;
 
-    const existingUser = await User.findOne({ email });
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "El campo de correo electrónico es obligatorio.",
+      });
+    }
 
+    const existingUser = await User.findOne({
+      where: {
+        email: email,
+      },
+    });
     if (existingUser) {
       return res.status(400).json({
         success: false,
