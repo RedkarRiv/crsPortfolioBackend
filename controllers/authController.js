@@ -14,6 +14,15 @@ authController.register = async (req, res) => {
     const checkEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{4,}$/;
 
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: "Ya existe una cuenta con este correo electrónico.",
+      });
+    }
+
     if (!checkEmail.test(req.body.email)) {
       return res.status(400).json({
         success: false,
@@ -33,14 +42,15 @@ authController.register = async (req, res) => {
     }
 
     const newPassword = bcrypt.hashSync(password, 8);
+
     const newUser = await User.create({
       firstName: firstName,
       lastName: lastName,
       email: email,
       password: newPassword,
-      emailCheck : 0,
-      roleId : 1,
-      userStatus : 1,
+      emailCheck: 0,
+      roleId: 1,
+      userStatus: 1,
     });
     return res.send(newUser);
   } catch (error) {
@@ -83,8 +93,8 @@ authController.login = async (req, res) => {
       {
         userId: user.id,
         roleId: user.roleId,
-        name:user.firstName,
-        lastName: user.lastName
+        name: user.firstName,
+        lastName: user.lastName,
       },
       "kilombo",
       {
@@ -105,6 +115,5 @@ authController.login = async (req, res) => {
     });
   }
 };
-
 
 module.exports = authController;
