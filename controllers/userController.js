@@ -101,7 +101,6 @@ userController.updateProfile = async (req, res) => {
   }
 };
 
-
 userController.inactivateProfile = async (req, res) => {
     try {
       const userId = req.userId;
