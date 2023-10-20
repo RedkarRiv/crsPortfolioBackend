@@ -1,6 +1,11 @@
 const { User } = require("../models");
 
 const userController = {};
+const checkEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{4,}$/;
+const bcrypt = require("bcrypt");
+
+
 
 userController.getMyUser = async (req, res) => {
   try {
@@ -50,7 +55,7 @@ userController.updateUser = async (req, res) => {
     if (newLastName) {
       updateData.lastName = newLastName;
     }
-    
+
     if (newEmail) {
       if (!checkEmail.test(newEmail)) {
         return res.status(400).json({
