@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 
 
 
-userController.getMyUser = async (req, res) => {
+userController.getMyProfile = async (req, res) => {
   try {
     const userId = req.userId;
     const oneUser = await User.findOne({
@@ -30,7 +30,7 @@ userController.getMyUser = async (req, res) => {
   }
 };
 
-userController.updateUser = async (req, res) => {
+userController.updateProfile = async (req, res) => {
   try {
     const userId = req.userId;
 
@@ -100,5 +100,45 @@ userController.updateUser = async (req, res) => {
     });
   }
 };
+
+
+userController.inactivateProfile = async (req, res) => {
+    try {
+      const userId = req.userId;
+      const userCheck = await User.findByPk(userId);
+  
+      if (!userCheck) {
+        return res.json({
+          success: true,
+          message: "El usuario no existe",
+        });
+      }
+
+      const inactivateUser = await User.update(
+        { userStatus: false },
+        {
+          where: {
+            id: userId,
+          },
+        }
+      );
+
+      return res.json({
+        success: true,
+        message: "El usuario ha sido desactivado",
+        data: inactivateUser,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "El usuario no ha podido ser desactivado",
+        error: error.message,
+      });
+    }
+  };
+
+
+
+
 
 module.exports = userController;
