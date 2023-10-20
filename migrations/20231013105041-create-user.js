@@ -25,7 +25,11 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       roleId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references:{
+          model: "Roles",
+          key: "id"
+        }
       },
       userStatus: {
         type: Sequelize.BOOLEAN
