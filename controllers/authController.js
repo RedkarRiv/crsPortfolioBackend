@@ -89,6 +89,13 @@ authController.login = async (req, res) => {
       });
     }
 
+    if (user.userStatus === false) {
+      return res.status(501).json({
+        success: true,
+        message: "Usuario desactivado",
+      });
+    }
+
     const isMatch = bcrypt.compareSync(password, user.password);
     console.log(isMatch);
 
