@@ -1,7 +1,7 @@
 const { ContactData } = require("../models");
 
-const requestLimitPerHour = 2; // Número máximo de solicitudes por hora
-const requests = {}; // Objeto para realizar un seguimiento de las solicitudes
+const requestLimitPerHour = 10;
+const requests = {};
 
 const messageController = {};
 
@@ -10,23 +10,23 @@ messageController.newContact = async (req, res) => {
     const contactName = req.body.name;
     const contactEmail = req.body.email;
     const contactMessage = req.body.message;
-    const clientIP = req.clientIp; // Obtiene la IP del cliente
+    const clientIP = req.clientIp;
+    const checkEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    // Verifica si el cliente ha realizado solicitudes en la última hora
     if (!requests[clientIP]) {
       requests[clientIP] = [];
     }
 
     const currentTime = new Date();
+
     const filteredRequests = requests[clientIP].filter((time) => {
-      return currentTime - time <= 3600000; // Elimina solicitudes anteriores a una hora
+      return currentTime - time <= 3600000;
     });
 
     console.log("Esto es el client IP:", clientIP);
     console.log("Esto son las solicitudes previas:", requests[clientIP]);
     console.log("Esto son las solicitudes filtradas:", filteredRequests);
 
-    // Verifica si el límite de solicitudes por hora se ha alcanzado
     if (filteredRequests.length >= requestLimitPerHour) {
       return res.status(429).json({
         success: false,
@@ -34,9 +34,15 @@ messageController.newContact = async (req, res) => {
       });
     }
 
-    // Registra la nueva solicitud
     requests[clientIP] = [...filteredRequests, currentTime];
 
+
+    if (!checkEmail.test(req.body.email)) {
+        return res.status(400).json({
+          success: false,
+          message: "El correo no es valido",
+        });
+      }
 
     const newMessage = await ContactData.create({
       name: contactName,
