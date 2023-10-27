@@ -1,4 +1,4 @@
-const { User, Role } = require("../models");
+const { User, Role, Order, Product, OrderStatus } = require("../models");
 
 const adminController = {};
 
@@ -204,6 +204,63 @@ adminController.updateUser = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "No se ha podido actualizar los datos del usuario",
+      error: error.message,
+    });
+  }
+};
+
+adminController.getAllOrders = async (req, res) => {
+  try {
+    const allOrders = await Order.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ["firstName", "email"],
+        },
+        {
+          model: Product,
+          attributes: ["productName", "productPrice"],
+        },
+        {
+          model: OrderStatus,
+          attributes: ["orderStatusName"],
+        },
+      ],
+    });
+
+//FORMAT ORDER DATA
+    const groupedOrders = {};
+
+    allOrders.forEach((order) => {
+      if (!groupedOrders[order.orderId]) {
+        groupedOrders[order.orderId] = {
+          Order: order.orderId,
+          Buyer: order.User, 
+          Status: order.OrderStatus.orderStatusName,
+          Products: [],
+          Created: order.createdAt,
+          Updated: order.updatedAt,
+        };
+      }
+// PRODUCTS ARRAY PUSH FOR NEW
+      groupedOrders[order.orderId].Products.push({
+        productId: order.Product.id,
+        productName: order.Product.productName,
+        productPrice: order.Product.productPrice,
+      });
+    });
+
+    const allOrdersFiltered = Object.values(groupedOrders);
+
+    return res.json({
+      success: true,
+      message: "Pedidos importados correctamente",
+      data: allOrdersFiltered,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error al importar pedidos",
       error: error.message,
     });
   }

@@ -8,5 +8,6 @@ router.get("/getUser", auth, isAdmin, adminController.getOneUser);
 router.put("/activateUser", auth, isAdmin, adminController.activateUser);
 router.put("/inactivateUser", auth, isAdmin, adminController.inactivateUser);
 router.put("/updateUser", auth, isAdmin, adminController.updateUser);
+router.get("/allOrders", auth, isAdmin, adminController.getAllOrders);
 
 module.exports = router;

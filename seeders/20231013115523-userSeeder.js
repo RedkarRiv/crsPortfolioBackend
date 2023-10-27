@@ -26,6 +26,17 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        firstName: "Buyer",
+        lastName: "Buyer",
+        email: "buyer@buyer.com",
+        password: "$2b$08$QCQx4rPr55A8kr6xmQLjt.CgF7bA/.nN/PLKsT4ZBCebk73R5UWGu",
+        emailCheck: 1,
+        roleId: 1,
+        userStatus: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 

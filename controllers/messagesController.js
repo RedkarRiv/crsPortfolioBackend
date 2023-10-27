@@ -36,13 +36,19 @@ messageController.newContact = async (req, res) => {
 
     requests[clientIP] = [...filteredRequests, currentTime];
 
-
     if (!checkEmail.test(req.body.email)) {
-        return res.status(400).json({
-          success: false,
-          message: "El correo no es valido",
-        });
-      }
+      return res.status(400).json({
+        success: false,
+        message: "El correo no es valido",
+      });
+    }
+
+    if (!req.body.message) {
+      return res.status(400).json({
+        success: false,
+        message: "No puedes enviar un mensaje en blanco",
+      });
+    }
 
     const newMessage = await ContactData.create({
       name: contactName,
