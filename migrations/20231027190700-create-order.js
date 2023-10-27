@@ -11,7 +11,6 @@ module.exports = {
       },
       orderId: {
         type: Sequelize.INTEGER,
-        autoIncrement: true,
         references: {
           model: "Products",
           key: "id",

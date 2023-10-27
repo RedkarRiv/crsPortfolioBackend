@@ -219,7 +219,7 @@ adminController.getAllOrders = async (req, res) => {
         },
         {
           model: Product,
-          attributes: ["productName", "productPrice"],
+          attributes: ["productName", "productPrice", "productQuantity"],
         },
         {
           model: OrderStatus,
@@ -247,7 +247,7 @@ adminController.getAllOrders = async (req, res) => {
         productId: order.Product.id,
         productName: order.Product.productName,
         productPrice: order.Product.productPrice,
-        productQuantity: order.Product.productQuantity,
+        productQuantity: order.productQuantity,
       });
     });
 
