@@ -247,6 +247,7 @@ adminController.getAllOrders = async (req, res) => {
         productId: order.Product.id,
         productName: order.Product.productName,
         productPrice: order.Product.productPrice,
+        productQuantity: order.Product.productQuantity,
       });
     });
 

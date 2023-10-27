@@ -25,6 +25,9 @@ module.exports = {
           key: "id",
         },
       },
+      productQuantity: {
+        type: Sequelize.INTEGER,
+      },
       productStock: {
         type: Sequelize.INTEGER,
       },
